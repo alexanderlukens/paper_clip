@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 import Upload from './components/upload.jsx'
+import Items from './components/items.jsx'
 import axios from 'axios'
 import $ from 'jquery'
 
@@ -11,8 +12,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      file:'',
-      imagePreviewUrl: ''
+      usersItems: []
     }
     this.handleUpload = this.handleUpload.bind(this)
   }
@@ -21,11 +21,20 @@ class App extends React.Component {
     let file = e.target.files[0];
     var reader  = new FileReader();
 
-    reader.onloadend = function () {
+    reader.onloadend = () => {
         axios.post('/picture', {
           'data': reader.result
         })
-        .then((res)=> {console.log(res.data)})
+        .then((res)=> {
+          this.state.usersItems.push(res.data)
+          let newItemsList = this.state.usersItems
+          this.setState({
+            usersItems: newItemsList
+          })
+        })
+        .catch((err) => {
+          console.error(err);
+        })
     }
 
     reader.readAsDataURL(file); //reads the data as a URL
@@ -36,6 +45,9 @@ class App extends React.Component {
       <div>
         <div>Hello World {this.state.imagePreviewUrl}</div>
         <Upload handleUpload={this.handleUpload}/>
+        {this.state.usersItems.map((itemUrl) => {
+          return <Items url={itemUrl} />
+        })}
       </div>
     )
   }

@@ -14,6 +14,10 @@ app.post('/picture', (req, res) => {
   let form_data = req.body.data
   cloudinary.config(config.cloudinaryConfig)
   cloudinary.v2.uploader.upload(form_data, function(err, result) {
+    if (err) {
+      console.error(err)
+      return
+    }
     Image.create({
       url: result.url,
       userId: 1

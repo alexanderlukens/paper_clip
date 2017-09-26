@@ -3,7 +3,8 @@ const Sequelize = require('sequelize')
 
 const Image = db.define('image', {
   url: Sequelize.STRING,
-  userId: Sequelize.INTEGER
+  userId: Sequelize.INTEGER,
+  traded: Sequelize.STRING
 })
 
 Image.sync()
