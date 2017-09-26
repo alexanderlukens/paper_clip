@@ -19,13 +19,13 @@ class App extends React.Component {
 
   handleUpload(e){
     let file = e.target.files[0];
-    let newImage = new FormData();
-    // newImage.append('newImage', file)
     var reader  = new FileReader();
 
     reader.onloadend = function () {
-        axios.post('/picture', {'data': reader.result})
-        .then((res)=> {console.log(res.data, 'aexl')})
+        axios.post('/picture', {
+          'data': reader.result
+        })
+        .then((res)=> {console.log(res.data)})
     }
 
     reader.readAsDataURL(file); //reads the data as a URL

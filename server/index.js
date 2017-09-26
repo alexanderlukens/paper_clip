@@ -2,6 +2,7 @@ const express = require('express')
 const parser = require('body-parser')
 const cloudinary = require('cloudinary')
 const config = require('./.config.js')
+const Image = require('./db/models/imageModel.js')
 const app = express()
 
 
@@ -13,7 +14,11 @@ app.post('/picture', (req, res) => {
   let form_data = req.body.data
   cloudinary.config(config.cloudinaryConfig)
   cloudinary.v2.uploader.upload(form_data, function(err, result) {
-    res.send(result)
+    Image.create({
+      url: result.url,
+      userId: 1
+    })
+    res.send(result.url)
   })
 })
 
