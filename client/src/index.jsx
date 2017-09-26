@@ -12,9 +12,14 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      usersItems: []
+      usersItems: [],
+      userId: 1
     }
     this.handleUpload = this.handleUpload.bind(this)
+  }
+
+  componentDidMount(){
+    axios.get('/picture')
   }
 
   handleUpload(e){
@@ -43,7 +48,6 @@ class App extends React.Component {
   render(){
     return (
       <div>
-        <div>Hello World {this.state.imagePreviewUrl}</div>
         <Upload handleUpload={this.handleUpload}/>
         {this.state.usersItems.map((itemUrl) => {
           return <Items url={itemUrl} />
