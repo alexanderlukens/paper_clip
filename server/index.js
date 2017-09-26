@@ -11,19 +11,34 @@ app.use(parser.json({limit: '50mb'}))
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.get('/picture', (req, res) => {
-  Image.findAll({
-    where: {
-      userId: req.query.userId,
+  let where;
+  if (req.query.marketplace){
+    where = {
+      username : {
+        $ne: req.query.username
+      },
       traded: null
     }
+  } else {
+    where = {
+      username: req.query.username,
+      traded: null
+    }
+  }
+  Image.findAll({
+    attributes: ['url', 'description'],
+    where: where
   })
   .then((result) => {
+    result = result.map((item) => [item.url, item.description])
     res.send(result)
   })
 })
 
 app.post('/picture', (req, res) => {
   let form_data = req.body.data
+  let username = req.body.username
+  let description = req.body.description
   cloudinary.config(config.cloudinaryConfig)
   cloudinary.v2.uploader.upload(form_data, function(err, result) {
     if (err) {
@@ -32,9 +47,11 @@ app.post('/picture', (req, res) => {
     }
     Image.create({
       url: result.url,
-      userId: 1
+      username: username,
+      description: description
     })
-    res.send(result.url)
+    result.description = description
+    res.send(result)
   })
 })
 
