@@ -7,7 +7,7 @@ const Marketplace = (props) => {
     <div>
       <div className="link"><Link to={`/home`}>Go Home</Link></div>
       {props.marketplace.map((item, i) => {
-        return <Items key={i} url={item[0]} description={item[1]} />
+        return <Items id={item[2]} key={item[2]} url={item[0]} description={item[1]} onClick={props.onClick} />
       })}
     </div>
   )

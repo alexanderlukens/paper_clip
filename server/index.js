@@ -26,11 +26,11 @@ app.get('/picture', (req, res) => {
     }
   }
   Image.findAll({
-    attributes: ['url', 'description'],
+    attributes: ['url', 'description', 'id'],
     where: where
   })
   .then((result) => {
-    result = result.map((item) => [item.url, item.description])
+    result = result.map((item) => [item.url, item.description, item.id])
     res.send(result)
   })
 })
@@ -50,8 +50,11 @@ app.post('/picture', (req, res) => {
       username: username,
       description: description
     })
-    result.description = description
-    res.send(result)
+    .then((data) => {
+      result.id = data.id
+      result.description = description
+      res.send(result)
+    })
   })
 })
 

@@ -6,9 +6,6 @@ import { Switch, Route, BrowserRouter, DefaultRoute, Redirect } from 'react-rout
 import axios from 'axios'
 import $ from 'jquery'
 
-const CLOUDINARY_UPLOAD_PRESET = 'your_upload_preset_id';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dzwmoi9aj/image/upload';
-
 class App extends React.Component {
   constructor(props){
     super(props);
@@ -22,6 +19,7 @@ class App extends React.Component {
     this.handleUpload = this.handleUpload.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDescription = this.handleDescription.bind(this)
+    this.OnItemClick = this.OnItemClick.bind(this)
   }
 
   componentDidMount(){
@@ -71,7 +69,7 @@ class App extends React.Component {
           description: description
         })
         .then((res)=> {
-          this.state.usersItems.push([res.data.url, res.data.description])
+          this.state.usersItems.push([res.data.url, res.data.description, res.data.id])
           let newItemsList = this.state.usersItems
           this.setState({
             usersItems: newItemsList,
@@ -101,6 +99,9 @@ class App extends React.Component {
     })
   }
 
+  OnItemClick(e){
+    console.log(e.target.id)
+  }
 
   render(){
     return (
@@ -110,7 +111,7 @@ class App extends React.Component {
             <Home handleUpload={this.handleUpload} usersItems={this.state.usersItems} handleSubmit={this.handleSubmit} handleDescription={this.handleDescription}/>
           )}/>
           <Route path="/marketplace" render={() => (
-            <Marketplace marketplace={this.state.marketplace}/>
+            <Marketplace marketplace={this.state.marketplace} onClick={this.OnItemClick}/>
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>
