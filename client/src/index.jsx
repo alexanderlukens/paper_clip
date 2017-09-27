@@ -19,7 +19,6 @@ class App extends React.Component {
     this.handleUpload = this.handleUpload.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDescription = this.handleDescription.bind(this)
-    this.OnItemClick = this.OnItemClick.bind(this)
   }
 
   componentDidMount(){
@@ -99,9 +98,6 @@ class App extends React.Component {
     })
   }
 
-  OnItemClick(e){
-    console.log(e.target.id)
-  }
 
   render(){
     return (
@@ -111,7 +107,7 @@ class App extends React.Component {
             <Home handleUpload={this.handleUpload} usersItems={this.state.usersItems} handleSubmit={this.handleSubmit} handleDescription={this.handleDescription}/>
           )}/>
           <Route path="/marketplace" render={() => (
-            <Marketplace marketplace={this.state.marketplace} onClick={this.OnItemClick}/>
+            <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems}/>
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>
