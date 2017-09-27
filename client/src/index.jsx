@@ -20,6 +20,7 @@ class App extends React.Component {
     this.handleUpload = this.handleUpload.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDescription = this.handleDescription.bind(this)
+    this.getItems = this.getItems.bind(this)
   }
 
   componentWillMount(){
@@ -108,7 +109,7 @@ class App extends React.Component {
             <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems}/>
           )}/>
           <Route path="/transactions" render={() => (
-            <Transactions username={this.state.username}/>
+            <Transactions username={this.state.username} getItems={this.getItems}/>
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>

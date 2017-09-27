@@ -8,7 +8,7 @@ const Home = (props) => {
     <div>
       <div className="link"> <Link to={`/transactions`}>Go to the Transactions</Link> <br/>  <Link to={`/marketplace`}>Go to the Marketplace</Link> </div>
       <Upload handleUpload={props.handleUpload} handleSubmit={props.handleSubmit} handleDescription={props.handleDescription}/>
-      {props.usersItems.map((item, i) => {
+      {props.usersItems.filter(item => item[3] !== 'x').map((item, i) => {
         return <Items id={item[2]} key={item[2]} url={item[0]} description={item[1]} />
       })}
     </div>

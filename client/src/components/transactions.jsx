@@ -10,6 +10,8 @@ class Transactions extends React.Component {
       initiatedTransactions: [],
       receivedTransactions: []
     }
+    this.onReject = this.onReject.bind(this)
+    this.onAccept = this.onAccept.bind(this)
   }
   componentDidMount(){
     axios.get('/transactions', {
@@ -28,7 +30,18 @@ class Transactions extends React.Component {
         receivedTransactions
       })
     })
+  }
 
+  onReject(e){
+    axios.put('/transactions/reject', {
+      tid: e.target.parentNode.dataset.tid
+    })
+  }
+  onAccept(e){
+    axios.put('/transactions/accept', {
+      tid: e.target.parentNode.dataset.tid,
+      itemid: e.target.parentNode.dataset.itemid
+    })
   }
 
   render(){
@@ -39,19 +52,19 @@ class Transactions extends React.Component {
         <h6>Your Open Offers</h6>
         <ul>
         {this.state.initiatedTransactions.map((transaction) => {
-          return (<li key={transaction.tid} className="offer">You offer to trade <strong>{transaction.giveitem}</strong> for {transaction.receiver}s <strong>{transaction.getitem}</strong></li>)
+          return (<li data-tid={transaction.tid} key={transaction.tid} className="offer">You offer to trade <strong>{transaction.giveitem}</strong> for {transaction.receiver}s <strong>{transaction.getitem}</strong></li>)
         })}
         </ul>
         <h6>Offers Awaiting Your Response</h6>
         <ul>
         {this.state.receivedTransactions.map((transaction) => {
-          return (<li key={transaction.tid} className="offer">{transaction.initiator} offers their <strong>{transaction.giveitem}</strong> for your <strong>{transaction.getitem}</strong><button className='accept'>Accept</button><button className='reject'>Reject</button></li>)
+          return (<li data-tid={transaction.tid} data-itemid={[transaction.getitemid,transaction.giveitemid]} key={transaction.tid} className="offer">{transaction.initiator} offers their <strong>{transaction.giveitem}</strong> for your <strong>{transaction.getitem}</strong><button className='accept' onClick={this.onAccept}>Accept</button><button onClick={this.onReject} className='reject'>Reject</button></li>)
         })}
         </ul>
         <h6>Your Closed Transactions</h6>
         <ul>
         {this.state.closedTransactions.map((transaction) => {
-          return (<li key={transaction.tid} className="offer">Trade: {transaction.initiator}s <strong>{transaction.giveitem}</strong> for {transaction.receiver}s <strong>{transaction.getitem}</strong>. This was <strong>{transaction.accepted}</strong> by {transaction.receiver}</li>)
+          return (<li data-tid={transaction.tid} key={transaction.tid} className="offer">Trade: {transaction.initiator}s <strong>{transaction.giveitem}</strong> for {transaction.receiver}s <strong>{transaction.getitem}</strong>. This was <strong>{transaction.accepted}</strong> by {transaction.receiver}</li>)
         })}
         </ul>
       </div>
