@@ -14,14 +14,21 @@ class Marketplace extends React.Component{
     }
     this.closePopup = this.closePopup.bind(this)
     this.OnItemClick = this.OnItemClick.bind(this)
+    this.OnCancel = this.OnCancel.bind(this)
   }
 
   closePopup(e){
-
-    this.setState({
-      selectItemToTradeFor: '',
-      selectItemToTradeForID: '',
-      showPopup: !this.state.showPopup
+    axios.post('/transactions', {
+      tradingWithID: e.target.id,
+      tradingForID: this.state.selectItemToTradeForID
+    })
+    .then((res) => {
+      alert('Transaction Request successful')
+      this.setState({
+        selectItemToTradeFor: '',
+        selectItemToTradeForID: '',
+        showPopup: !this.state.showPopup
+      })
     })
   }
 
@@ -38,6 +45,13 @@ class Marketplace extends React.Component{
     })
   }
 
+  OnCancel(){
+    this.setState({
+      showPopup: !this.state.showPopup,
+      selectItemToTradeFor: '',
+      selectItemToTradeForID: ''
+    })
+  }
 
   render(){
     return (
@@ -51,6 +65,7 @@ class Marketplace extends React.Component{
             closePopup={this.closePopup}
             selectItemToTradeFor={this.state.selectItemToTradeFor}
             usersItems={this.props.usersItems}
+            onCancel={this.OnCancel}
           />
           : null
         }

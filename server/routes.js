@@ -55,5 +55,17 @@ router.post('/picture', (req, res) => {
   })
 })
 
+router.post('/transactions', (req,res) => {
+  Transaction.create({
+    tradingWithID: req.body.tradingWithID,
+    tradingForID: req.body.tradingForID,
+    open: true,
+    accepted: null
+  })
+  .then((response) => {
+    res.send(response)
+  })
+})
+
 
 module.exports = router;
