@@ -1,3 +1,14 @@
+h3{
+  text-align: center;
+}
+
+h6 {
+  margin: 10px 0px 10px 0px
+}
+
+.offer {
+  font-size: 10px;
+}
 .link {
   display: block;
   text-align: right;
@@ -26,4 +37,14 @@
   height:60px;
   width:60px;
   border: 1px solid black;
+}
+
+.accept, .reject {
+  margin-top: 5px;
+  width: 50px;
+  height: 25px;
+}
+
+.accept {
+  margin-left: 10px
 }
