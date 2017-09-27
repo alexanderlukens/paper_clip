@@ -22,19 +22,16 @@ class App extends React.Component {
     this.handleDescription = this.handleDescription.bind(this)
   }
 
+  componentWillMount(){
+    let username = prompt('Please Enter Your Username');
+    this.setState({
+      username: username
+    })
+  }
+
   componentDidMount(){
-    if (this.state.username === '') {
-      let username = prompt('Please Enter Your Username');
-      this.setState({
-        username: username
-      }, () => {
-        this.getItems()
-       this.getItems(true)
-      })
-    } else {
-      this.getItems()
-      this.getItems(true)
-    }
+    this.getItems()
+    this.getItems(true)
   }
 
   getItems(marketplace){
@@ -111,7 +108,7 @@ class App extends React.Component {
             <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems}/>
           )}/>
           <Route path="/transactions" render={() => (
-            <Transactions />
+            <Transactions username={this.state.username}/>
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>

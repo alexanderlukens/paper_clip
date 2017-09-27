@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary')
 const config = require('./.config.js')
 const Image = require('./db/models/imageModel.js')
 const Transaction = require('./db/models/transactionModel.js')
-
+const db = require('./db/db.js')
 
 
 router.get('/picture', (req, res) => {
@@ -56,43 +56,35 @@ router.post('/picture', (req, res) => {
 })
 
 router.post('/transactions', (req,res) => {
-  let tradingWithUser = '';
-  let tradingForUser = '';
-  findImageUser(req.body.tradingWithID)
-  .then((result) => {
-    tradingWithUser = result.username
-    return;
+  Transaction.create({
+    trading_with_id: req.body.tradingWithID,
+    trading_for_id: req.body.tradingForID,
+    open: true,
+    accepted: null
   })
-  .then(() => {
-    findImageUser(req.body.tradingForID)
-    .then((result) => {
-      tradingForUser = result.username
-      return
-    })
-    .then(() => {
-      Transaction.create({
-        tradingWithID: req.body.tradingWithID,
-        tradingWithUser: tradingWithUser,
-        tradingForID: req.body.tradingForID,
-        tradingForUser: tradingForUser,
-        open: true,
-        accepted: null
-      })
-      .then((response) => {
-        res.send(response)
-      })
-    })
+  .then((response) => {
+    res.send(response)
   })
 })
 
-findImageUser = (id) => {
-  return Image.find({
-    attributes: ['username'],
-    where: {
-      id: id
-    }
-  })
-}
-
+router.get('/transactions', (req,res) => {
+  db.query(`select
+              t.id as tid,
+              i.description as giveItem,
+              i.username as initiator,
+              i2.description as getItem,
+              i2.username as receiver,
+              t.open,
+              t.accepted
+            from transactions t
+            join images i on i.id = t.trading_with_id
+            join images i2 on i2.id = t.trading_for_id
+            where (i.username = :username or i2.username = :username)
+            order by t.open`
+          , {replacements: {username: req.query.username},
+             type: db.QueryTypes.SELECT})
+          .then((result) => res.send(result))
+          .catch((err) => console.error(err))
+})
 
 module.exports = router;

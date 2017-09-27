@@ -2,10 +2,8 @@ const db = require('../db.js')
 const Sequelize = require('sequelize')
 
 const Transaction = db.define('transaction', {
-  tradingWithID: Sequelize.INTEGER,
-  tradingWithUser: Sequelize.STRING,
-  tradingForID: Sequelize.INTEGER,
-  tradingForUser: Sequelize.STRING,
+  trading_with_id: Sequelize.INTEGER,
+  trading_for_id: Sequelize.INTEGER,
   open: Sequelize.STRING,
   accepted: Sequelize.STRING
 })
