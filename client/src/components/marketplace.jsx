@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Items from './items.jsx'
 import Popup from './popup.jsx'
+import axios from 'axios'
 
 class Marketplace extends React.Component{
   constructor(props){
@@ -16,7 +17,7 @@ class Marketplace extends React.Component{
   }
 
   closePopup(e){
-    console.log(this.state.selectItemToTradeForID)
+
     this.setState({
       selectItemToTradeFor: '',
       selectItemToTradeForID: '',
