@@ -56,16 +56,43 @@ router.post('/picture', (req, res) => {
 })
 
 router.post('/transactions', (req,res) => {
-  Transaction.create({
-    tradingWithID: req.body.tradingWithID,
-    tradingForID: req.body.tradingForID,
-    open: true,
-    accepted: null
+  let tradingWithUser = '';
+  let tradingForUser = '';
+  findImageUser(req.body.tradingWithID)
+  .then((result) => {
+    tradingWithUser = result.username
+    return;
   })
-  .then((response) => {
-    res.send(response)
+  .then(() => {
+    findImageUser(req.body.tradingForID)
+    .then((result) => {
+      tradingForUser = result.username
+      return
+    })
+    .then(() => {
+      Transaction.create({
+        tradingWithID: req.body.tradingWithID,
+        tradingWithUser: tradingWithUser,
+        tradingForID: req.body.tradingForID,
+        tradingForUser: tradingForUser,
+        open: true,
+        accepted: null
+      })
+      .then((response) => {
+        res.send(response)
+      })
+    })
   })
 })
+
+findImageUser = (id) => {
+  return Image.find({
+    attributes: ['username'],
+    where: {
+      id: id
+    }
+  })
+}
 
 
 module.exports = router;

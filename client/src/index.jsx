@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import Home from './components/home.jsx'
 import Marketplace from './components/marketplace.jsx'
+import Transactions from './components/transactions.jsx'
 import { Switch, Route, BrowserRouter, DefaultRoute, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import $ from 'jquery'
@@ -108,6 +109,9 @@ class App extends React.Component {
           )}/>
           <Route path="/marketplace" render={() => (
             <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems}/>
+          )}/>
+          <Route path="/transactions" render={() => (
+            <Transactions />
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>

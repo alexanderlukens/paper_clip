@@ -56,7 +56,7 @@ class Marketplace extends React.Component{
   render(){
     return (
       <div>
-        <div className="link"><Link to={`/home`}>Go Home</Link></div>
+        <div className="link"><Link to={`/home`}>Go Home</Link><br/><Link to={`/transactions`}>Go to the Transactions</Link></div>
         {this.props.marketplace.map((item, i) => {
           return <Items id={item[2]} key={item[2]} url={item[0]} description={item[1]} onClick={this.OnItemClick} />
         })}
