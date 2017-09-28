@@ -17,6 +17,7 @@ class Transactions extends React.Component {
     componentWillUnmount() {
       this.props.socket.off('offer');
       this.props.socket.off('reject');
+      this.props.socket.off('accept');
     }
 
   componentDidMount(){
@@ -63,6 +64,29 @@ class Transactions extends React.Component {
           })
         }
       })
+
+      this.props.socket.on('accept', (data) => {
+        let items = data.itemid.split(',').map((num) => parseInt(num))
+        let transaction = this.state.initiatedTransactions.filter((obj) => {
+          return obj.tid === parseInt(data.tid)
+        })
+        if (transaction[0]){
+          transaction = transaction[0];
+          transaction.accepted = 'accepted'
+          this.state.closedTransactions.push(transaction)
+        }
+        let newClosedTransactions = this.state.closedTransactions
+        let newInitiatedTransactions = this.state.initiatedTransactions.filter(obj => {
+          items.indexOf(obj.getitemid) === -1 && items.indexOf(obj.giveitemid) === -1
+        })
+        let newReceivedTransactions = this.state.receivedTransactions.filter(obj => items.indexOf(obj.getitemid) === -1 && items.indexOf(obj.giveitemid) === -1)
+        console.log(newInitiatedTransactions,newReceivedTransactions,newClosedTransactions)
+        this.setState({
+          initiatedTransactions: newInitiatedTransactions,
+          receivedTransactions: newReceivedTransactions,
+          newClosedTransactions: newClosedTransactions
+        })
+      })
     })
   }
 
@@ -78,10 +102,11 @@ class Transactions extends React.Component {
     })
   }
   onAccept(e){
-    // this.props.socket.emit('accept', {
-    //   tid: e.target.parentNode.dataset.tid,
-    //   itemid: e.target.parentNode.dataset.itemid
-    // })
+
+    this.props.socket.emit('accept', {
+      tid: e.target.parentNode.dataset.tid,
+      itemid: e.target.parentNode.dataset.itemid
+    })
     axios.put('/transactions/accept', {
       tid: e.target.parentNode.dataset.tid,
       itemid: e.target.parentNode.dataset.itemid

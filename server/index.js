@@ -26,4 +26,8 @@ io.on('connection', (socket) => {
   socket.on('offer', (data) => {
     io.sockets.emit('offer',data)
   })
+
+  socket.on('accept', (data) => {
+    io.sockets.emit('accept',data)
+  })
 })
