@@ -50,8 +50,18 @@ class Transactions extends React.Component {
           })
         }
       })
+      //websocket for new offer
       this.props.socket.on('offer', (data) => {
-        console.log(data)
+        let offer = data.offer[0]
+        let userHasItem = this.props.usersItems.some((item) => {
+          return item[2] === offer.getitemid
+        })
+        if (userHasItem){
+          this.state.receivedTransactions.push(offer)
+          this.setState({
+            receivedTransactions: this.state.receivedTransactions
+          })
+        }
       })
     })
   }

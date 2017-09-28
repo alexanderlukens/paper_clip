@@ -114,7 +114,7 @@ class App extends React.Component {
             <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems} socket={this.state.socket}/>
           )}/>
           <Route path="/transactions" render={() => (
-            <Transactions username={this.state.username} getItems={this.getItems} socket={this.state.socket}/>
+            <Transactions username={this.state.username} getItems={this.getItems} socket={this.state.socket} usersItems={this.state.usersItems}/>
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>

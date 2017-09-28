@@ -63,7 +63,26 @@ router.post('/transactions', (req,res) => {
     accepted: null
   })
   .then((response) => {
-    res.send(response)
+      db.query(`select
+                  t.id as tid,
+                  i.id as giveItemID,
+                  i.description as giveItem,
+                  i.username as initiator,
+                  i2.id as getItemID,
+                  i2.description as getItem,
+                  i2.username as receiver,
+                  t.open,
+                  t.accepted
+                from transactions t
+                join images i on i.id = t.trading_with_id
+                join images i2 on i2.id = t.trading_for_id
+                where t.id = ${response.id}
+                      and coalesce(t.accepted,'') <> 'expired'
+                order by t.open`
+              , {type: db.QueryTypes.SELECT})
+      .then((result) => {
+        res.send(result)
+      })
   })
 })
 
