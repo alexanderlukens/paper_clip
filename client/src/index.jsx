@@ -111,7 +111,7 @@ class App extends React.Component {
             <Home handleUpload={this.handleUpload} usersItems={this.state.usersItems} handleSubmit={this.handleSubmit} handleDescription={this.handleDescription}/>
           )}/>
           <Route path="/marketplace" render={() => (
-            <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems}/>
+            <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems} socket={this.state.socket}/>
           )}/>
           <Route path="/transactions" render={() => (
             <Transactions username={this.state.username} getItems={this.getItems} socket={this.state.socket}/>

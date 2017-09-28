@@ -24,6 +24,9 @@ class Marketplace extends React.Component{
       tradingForID: this.state.selectItemToTradeForID
     })
     .then((res) => {
+      this.props.socket.emit('offer', {
+        offer: res.data
+      })
       alert('Transaction Request successful')
       this.setState({
         selectItemToTradeFor: '',

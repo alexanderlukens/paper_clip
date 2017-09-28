@@ -13,6 +13,12 @@ class Transactions extends React.Component {
     this.onReject = this.onReject.bind(this)
     this.onAccept = this.onAccept.bind(this)
   }
+
+    componentWillUnmount() {
+      this.props.socket.off('offer');
+      this.props.socket.off('reject');
+    }
+
   componentDidMount(){
     axios.get('/transactions', {
       params: {
@@ -31,15 +37,21 @@ class Transactions extends React.Component {
       })
     })
     .then(() => {
+      //websocket for reject
       this.props.socket.on('reject', (data) => {
         let closedEvent = this.state.initiatedTransactions.filter((transaction) => transaction.tid == data.tid)
         let initiatedTransactions = this.state.initiatedTransactions.filter((transaction) => transaction.tid != data.tid)
-        closedEvent[0].accepted = 'rejected'
-        this.state.closedTransactions.push(closedEvent[0])
-        this.setState({
-          initiatedTransactions: initiatedTransactions,
-          closedTransactions: this.state.closedTransactions
-        })
+        if (closedEvent[0]){
+          closedEvent[0].accepted = 'rejected'
+          this.state.closedTransactions.push(closedEvent[0])
+          this.setState({
+            initiatedTransactions: initiatedTransactions,
+            closedTransactions: this.state.closedTransactions
+          })
+        }
+      })
+      this.props.socket.on('offer', (data) => {
+        console.log(data)
       })
     })
   }
@@ -56,6 +68,10 @@ class Transactions extends React.Component {
     })
   }
   onAccept(e){
+    // this.props.socket.emit('accept', {
+    //   tid: e.target.parentNode.dataset.tid,
+    //   itemid: e.target.parentNode.dataset.itemid
+    // })
     axios.put('/transactions/accept', {
       tid: e.target.parentNode.dataset.tid,
       itemid: e.target.parentNode.dataset.itemid

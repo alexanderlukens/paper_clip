@@ -17,9 +17,13 @@ const server = app.listen(3000, () => {
 const io = socket(server);
 
 io.on('connection', (socket) => {
-  console.log('made connectin socket' )
+  console.log('made connectin socket', socket.id )
 
   socket.on('reject', (data) => {
     io.sockets.emit('reject',data)
+  })
+
+  socket.on('offer', (data) => {
+    io.sockets.emit('offer',data)
   })
 })
