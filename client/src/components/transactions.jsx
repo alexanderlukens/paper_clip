@@ -30,10 +30,28 @@ class Transactions extends React.Component {
         receivedTransactions
       })
     })
+    .then(() => {
+      this.props.socket.on('reject', (data) => {
+        let closedEvent = this.state.initiatedTransactions.filter((transaction) => transaction.tid == data.tid)
+        let initiatedTransactions = this.state.initiatedTransactions.filter((transaction) => transaction.tid != data.tid)
+        closedEvent[0].accepted = 'rejected'
+        this.state.closedTransactions.push(closedEvent[0])
+        this.setState({
+          initiatedTransactions: initiatedTransactions,
+          closedTransactions: this.state.closedTransactions
+        })
+      })
+    })
   }
 
   onReject(e){
     axios.put('/transactions/reject', {
+      tid: e.target.parentNode.dataset.tid
+    })
+    .then(() => {
+      this.componentDidMount()
+    })
+    this.props.socket.emit('reject', {
       tid: e.target.parentNode.dataset.tid
     })
   }

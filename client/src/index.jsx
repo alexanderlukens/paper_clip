@@ -27,14 +27,17 @@ class App extends React.Component {
   componentWillMount(){
     let username = prompt('Please Enter Your Username');
     this.setState({
-      username: username
+      username: username,
+      socket: ''
     })
   }
 
   componentDidMount(){
     this.getItems()
     this.getItems(true)
-    const socket = io('http://localhost:3000');
+    this.setState({
+      socket: io('http://localhost:3000')
+    })
   }
 
   getItems(marketplace){
@@ -51,7 +54,6 @@ class App extends React.Component {
         })
         return
       }
-      console.log(result)
       this.setState({
         usersItems: result.data
       })
@@ -112,7 +114,7 @@ class App extends React.Component {
             <Marketplace marketplace={this.state.marketplace} usersItems={this.state.usersItems}/>
           )}/>
           <Route path="/transactions" render={() => (
-            <Transactions username={this.state.username} getItems={this.getItems}/>
+            <Transactions username={this.state.username} getItems={this.getItems} socket={this.state.socket}/>
           )}/>
           <Route exact path='*' render={() => (
             <Redirect to="/home"/>

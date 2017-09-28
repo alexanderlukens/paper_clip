@@ -18,4 +18,8 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
   console.log('made connectin socket' )
+
+  socket.on('reject', (data) => {
+    io.sockets.emit('reject',data)
+  })
 })
