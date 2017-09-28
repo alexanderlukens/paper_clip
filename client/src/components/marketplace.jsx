@@ -10,7 +10,8 @@ class Marketplace extends React.Component{
     this.state = {
       showPopup: false,
       selectItemToTradeFor : '',
-      selectItemToTradeForID: ''
+      selectItemToTradeForID: '',
+      marketplace: this.props.marketplace
     }
     this.closePopup = this.closePopup.bind(this)
     this.OnItemClick = this.OnItemClick.bind(this)
@@ -29,6 +30,12 @@ class Marketplace extends React.Component{
         selectItemToTradeForID: '',
         showPopup: !this.state.showPopup
       })
+    })
+  }
+
+  componentWillReceiveProps(newProps){
+    this.setState({
+      marketplace: newProps.marketplace
     })
   }
 
@@ -57,7 +64,7 @@ class Marketplace extends React.Component{
     return (
       <div>
         <div className="link"><Link to={`/home`}>Go Home</Link><br/><Link to={`/transactions`}>Go to the Transactions</Link></div>
-        {this.props.marketplace.map((item, i) => {
+        {this.state.marketplace.map((item, i) => {
           return <Items id={item[2]} key={item[2]} url={item[0]} description={item[1]} onClick={this.OnItemClick} />
         })}
         {this.state.showPopup ?

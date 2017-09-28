@@ -42,6 +42,11 @@ class Transactions extends React.Component {
       tid: e.target.parentNode.dataset.tid,
       itemid: e.target.parentNode.dataset.itemid
     })
+    .then(() => {
+      this.componentDidMount()
+      setTimeout(this.props.getItems, 2000)
+      setTimeout(this.props.getItems.bind(null,true), 2000)
+    })
   }
 
   render(){

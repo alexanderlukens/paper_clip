@@ -5,6 +5,7 @@ import Marketplace from './components/marketplace.jsx'
 import Transactions from './components/transactions.jsx'
 import { Switch, Route, BrowserRouter, DefaultRoute, Redirect } from 'react-router-dom'
 import axios from 'axios'
+import io from 'socket.io-client'
 import $ from 'jquery'
 
 class App extends React.Component {
@@ -33,6 +34,7 @@ class App extends React.Component {
   componentDidMount(){
     this.getItems()
     this.getItems(true)
+    const socket = io('http://localhost:3000');
   }
 
   getItems(marketplace){
@@ -49,6 +51,7 @@ class App extends React.Component {
         })
         return
       }
+      console.log(result)
       this.setState({
         usersItems: result.data
       })

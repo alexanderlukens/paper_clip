@@ -18,7 +18,8 @@ router.get('/picture', (req, res) => {
     }
   } else {
     where = {
-      username: req.query.username
+      username: req.query.username,
+      traded: null
     }
   }
   Image.findAll({
@@ -127,6 +128,7 @@ const updateAllTransaction = (items, tid) => {
               accepted = 'expired'
             where id <> ${tid} and (trading_with_id in (${items[0]}, ${items[1]}) or trading_for_id in (${items[0]}, ${items[1]}))`
           , {type: db.QueryTypes.UPDATE})
+  .then((result) => result)
 }
 
 const updateItems = (items) => {
@@ -134,6 +136,7 @@ const updateItems = (items) => {
             set traded = 'x'
             where id in (${items[0]}, ${items[1]})`
           , {type: db.QueryTypes.UPDATE})
+  .then((result) => result)
 }
 
 const createNewItems = (items) => {
